@@ -6,8 +6,19 @@
        </p>
     </div>
     <table class="admin-list-table">
-        {% for h in head %}
-            <th>{{ h.label }}</th>
+        {% for key,h in head %}
+            {%  if key == "options" and options.buttons.create  %}
+                <th>
+                    {{ h.label }} |
+                    <a href="{{ path("_email_new") }}">
+                        <div class="button">
+                            Create New
+                        </div>
+                    </a>
+                </th>
+            {% else %}
+                <th>{{ h.label }}</th>
+            {% endif %}
         {% endfor %}
     </table>
 </div>
