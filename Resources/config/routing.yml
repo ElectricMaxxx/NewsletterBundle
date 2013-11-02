@@ -1,0 +1,4 @@
+_email:
+  resource: "@NewsletterBundle/Controller/EmailController.php"
+  type: annotation
+  prefix: /email
