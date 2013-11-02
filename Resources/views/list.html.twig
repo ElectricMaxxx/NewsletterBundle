@@ -1,0 +1,13 @@
+<div class="admin-list-block">
+    <div clas="adminInfoBlock">
+       <h1>{{ title }}</h1>
+       <p>
+           {{ message }}
+       </p>
+    </div>
+    <table class="admin-list-table">
+        {% for h in head %}
+            <th>{{ h.label }}</th>
+        {% endfor %}
+    </table>
+</div>
