@@ -1,5 +1,5 @@
 <?php
-namespace Newsletter;
+namespace NewsletterBundle;
 use Symfony\Component\HttpKernel\Bundle\Bundle;
 
 /**

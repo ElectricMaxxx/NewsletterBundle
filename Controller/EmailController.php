@@ -6,8 +6,9 @@
  * 
  */
 
-namespace Newsletter\Controller;
+namespace NewsletterBundle\Controller;
 
+use NewsletterBundle\Form\CreateEmailForm;
 use Symfony\Bundle\FrameworkBundle\Controller\Controller;
 use Sensio\Bundle\FrameworkExtraBundle\Configuration\Route;
 use Sensio\Bundle\FrameworkExtraBundle\Configuration\Template;
@@ -64,7 +65,22 @@ class EmailController extends  Controller{
      */
     public function newAction()
     {
-        return array('message'=>'neu erstellen');
+        $form = $this->get('form.factory')->create(new CreateEmailForm());
+        $request = $this->getRequest();
+        if($request->isMethod('POST'))
+        {
+            $form->submit($request);
+            if($form->isValid())
+            {
+                print_r($form->getData());
+            }
+        }
+        return array(
+            'form'      => $form->createView(),
+            'message'=>'neu erstellen',
+            'type'  => 'create',
+            'title' => 'Einen Abonenten erstellen'
+        );
     }
 
 } 
