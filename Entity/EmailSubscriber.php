@@ -1,69 +1,190 @@
 <?php
-/**
- * User: maximilian
- * Date: 11/3/13
- * Time: 8:11 AM
- * 
- */
 
 namespace NewsletterBundle\Entity;
+
 use Doctrine\Common\Collections\ArrayCollection;
 use Doctrine\ORM\Mapping as ORM;
 
 /**
- * @ORM\Entity
- * @ORM\Table(name="email_subscriber")
- * Class EmailSubscriber
- * @package NewsletterBundle\Entity
+ * EmailSubscriber
+ *
+ * @ORM\Table()
+ * @ORM\Entity(repositoryClass="NewsletterBundle\Entity\EmailSubscriberRepository")
  */
-class EmailSubscriber   {
-
+class EmailSubscriber
+{
     /**
-     * @ORM\Column(type="integer")
+     * @var integer
+     *
+     * @ORM\Column(name="id", type="integer")
      * @ORM\Id
-     * @ORM\GeneratedValue(strategy="Auto")
-     * @var int
+     * @ORM\GeneratedValue(strategy="AUTO")
      */
-    protected $id;
+    private $id;
 
     /**
-     * the simple email address of a subscriber
-     * @ORM\Column(type="string",length=100)
+     * @var string
      *
-     * @var string
+     * @ORM\Column(name="email", type="string", length=100)
      */
-    protected $email;
+    private $email;
 
     /**
-     * @ORM\Column(type="string",length=100)
+     * @var string
      *
-     * @var string
+     * @ORM\Column(name="first_ame", type="string", length=100)
      */
-    protected $firstName;
+    private $firstName;
 
     /**
-     * @ORM\Column(type="string",length=100)
+     * @var string
      *
-     * @var string
+     * @ORM\Column(name="last_name", type="string", length=100)
      */
-    protected $lastName;
+    private $lastName;
 
     /**
-     * @ORM\Column(type="text")
      * @var string
+     *
+     * @ORM\Column(name="description", type="text")
      */
-    protected $description;
+    private $description;
 
     /**
-     * @ORM\MannyToManny(targetEntity="SubscriberGroup",inversedBy="subscriber")
      * @var \Doctrine\Common\Collections\ArrayCollection
+     * @ORM\ManyToMany(targetEntity="NewsletterBundle\Entity\SubscriberGroup", inversedBy="subscriber")
+     * @ORM\JoinTable(name="subscriber_group_subscriber")
      */
-    protected $groups;
-
+    private $groups;
 
     public function __construct()
     {
         $this->groups = new ArrayCollection();
     }
 
-} 
+
+    /**
+     * Get id
+     *
+     * @return integer 
+     */
+    public function getId()
+    {
+        return $this->id;
+    }
+
+    /**
+     * Set email
+     *
+     * @param string $email
+     * @return EmailSubscriber
+     */
+    public function setEmail($email)
+    {
+        $this->email = $email;
+    
+        return $this;
+    }
+
+    /**
+     * Get email
+     *
+     * @return string 
+     */
+    public function getEmail()
+    {
+        return $this->email;
+    }
+
+    /**
+     * Set firstName
+     *
+     * @param string $firstName
+     * @return EmailSubscriber
+     */
+    public function setFirstName($firstName)
+    {
+        $this->firstName = $firstName;
+    
+        return $this;
+    }
+
+    /**
+     * Get firstName
+     *
+     * @return string 
+     */
+    public function getFirstName()
+    {
+        return $this->firstName;
+    }
+
+    /**
+     * Set lastName
+     *
+     * @param string $lastName
+     * @return EmailSubscriber
+     */
+    public function setLastName($lastName)
+    {
+        $this->lastName = $lastName;
+    
+        return $this;
+    }
+
+    /**
+     * Get lastName
+     *
+     * @return string 
+     */
+    public function getLastName()
+    {
+        return $this->lastName;
+    }
+
+    /**
+     * Set description
+     *
+     * @param string $description
+     * @return EmailSubscriber
+     */
+    public function setDescription($description)
+    {
+        $this->description = $description;
+    
+        return $this;
+    }
+
+    /**
+     * Get description
+     *
+     * @return string 
+     */
+    public function getDescription()
+    {
+        return $this->description;
+    }
+
+    /**
+     * Set groups
+     *
+     * @param array $groups
+     * @return EmailSubscriber
+     */
+    public function setGroups($groups)
+    {
+        $this->groups = $groups;
+    
+        return $this;
+    }
+
+    /**
+     * Get groups
+     *
+     * @return array 
+     */
+    public function getGroups()
+    {
+        return $this->groups;
+    }
+}

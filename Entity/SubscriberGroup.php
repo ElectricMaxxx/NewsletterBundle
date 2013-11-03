@@ -1,48 +1,123 @@
 <?php
+
 namespace NewsletterBundle\Entity;
-use Doctrine\Common\Collections\ArrayCollection;
+
 use Doctrine\ORM\Mapping as ORM;
-
 /**
- * @ORM\Entity
- * @ORM\Table(name"subscriber_group")
+ * SubscriberGroup
  *
- * Class SubscriberGroup
- * @package NewsletterBundle\Entity
+ * @ORM\Table()
+ * @ORM\Entity(repositoryClass="NewsletterBundle\Entity\SubscriberGroupRepository")
  */
-class SubscriberGroup {
-
+class SubscriberGroup
+{
     /**
-     * @ORM\Column(type="integer")
+     * @var integer
+     *
+     * @ORM\Column(name="id", type="integer")
      * @ORM\Id
-     *
-     * @var int
+     * @ORM\GeneratedValue(strategy="AUTO")
      */
-    protected $id;
+    private $id;
 
     /**
-     * @ORM\Column(type="string",length=100)
      * @var string
+     *
+     * @ORM\Column(name="title", type="string", length=100)
      */
-    protected $title;
+    private $title;
 
     /**
-     * @ORM\Column(type="text")
+     * @var string
      *
-     * @var
+     * @ORM\Column(name="description", type="text")
      */
-    protected $description;
+    private $description;
 
     /**
-     * @ORM\MannyToManny(targetEntity="EmailSubscriber",mappedBy="groups")
-     * @ORM\JoinTable(name="email_subscriber_groups")
-     *
      * @var \Doctrine\Common\Collections\ArrayCollection
+     * @ORM\ManyToMany(targetEntity="NewsletterBundle\Entity\EmailSubscriber", mappedBy="group")
+     * @ORM\JoinTable(name="subscriber_group_subscriber")
      */
-    protected $subscriber;
+    private $subscriber;
 
-    public function __construct()
+
+    /**
+     * Get id
+     *
+     * @return integer 
+     */
+    public function getId()
     {
-        $this->subscriber = new ArrayCollection();
+        return $this->id;
     }
-} 
+
+    /**
+     * Set title
+     *
+     * @param string $title
+     * @return SubscriberGroup
+     */
+    public function setTitle($title)
+    {
+        $this->title = $title;
+    
+        return $this;
+    }
+
+    /**
+     * Get title
+     *
+     * @return string 
+     */
+    public function getTitle()
+    {
+        return $this->title;
+    }
+
+    /**
+     * Set description
+     *
+     * @param string $description
+     * @return SubscriberGroup
+     */
+    public function setDescription($description)
+    {
+        $this->description = $description;
+    
+        return $this;
+    }
+
+    /**
+     * Get description
+     *
+     * @return string 
+     */
+    public function getDescription()
+    {
+        return $this->description;
+    }
+
+    /**
+     * Set subscriber
+     *
+     * @param array $subscriber
+     * @return SubscriberGroup
+     */
+    public function setSubscriber($subscriber)
+    {
+        $this->subscriber = $subscriber;
+    
+        return $this;
+    }
+
+    /**
+     * Get subscriber
+     *
+     * @return array 
+     */
+    public function getSubscriber()
+    {
+        return $this->subscriber;
+    }
+}
