@@ -11,6 +11,7 @@ namespace NewsletterBundle\Form;
 
 use Symfony\Component\Form\AbstractType;
 use Symfony\Component\Form\FormBuilderInterface;
+use Symfony\Component\OptionsResolver\OptionsResolverInterface;
 
 class CreateEmailForm extends AbstractType{
 
@@ -31,5 +32,12 @@ class CreateEmailForm extends AbstractType{
     public function getName()
     {
         return 'create_email';
+    }
+
+    public function setDefaultOptions(OptionsResolverInterface $resolver)
+    {
+        $resolver->setDefaults(array(
+           'data_class' => 'NewsletterBundle\Entity\EmailSubscriber'
+        ));
     }
 }

@@ -33,7 +33,14 @@ class EmailController extends  Controller{
      */
     public function indexAction()
     {
+        $em = $this->getDoctrine()->getManager();
+        $SubscriberRepsitory = $em->getRepository('NewsletterBundle:EmailSubscriber');
+        $Subscriber = $SubscriberRepsitory->findAll();
 
+        foreach($Subscriber as $email)
+        {
+            print("Mail: ".$email->getEmail()."\n");
+        }
         $options = array(
             'buttons' => array('create'=>true,'edit'=>true,'delete'=>true,'activate'=>true)
         );
@@ -41,7 +48,7 @@ class EmailController extends  Controller{
             'title'     => 'Email-Adressen verwalten',
             'message'   => 'verwalte deine Mailadressen hier',
             'options'   => $options,
-            'data'      => array(),
+            'data'      => $Subscriber,
             'head'      => array(
                 'mail'  => array(
                     'data_map'  => 'mail',
@@ -72,7 +79,11 @@ class EmailController extends  Controller{
             $form->submit($request);
             if($form->isValid())
             {
-                print_r($form->getData());
+                $emailSubscriber = $form->getData();
+                $em = $this->getDoctrine()->getManager();
+                $em->persist($emailSubscriber);
+                $em->flush();
+                $this->redirect($this->generateUrl('_email_list'));
             }
         }
         return array(
