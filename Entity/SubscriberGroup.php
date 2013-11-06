@@ -120,4 +120,34 @@ class SubscriberGroup
     {
         return $this->subscriber;
     }
+    /**
+     * Constructor
+     */
+    public function __construct()
+    {
+        $this->subscriber = new \Doctrine\Common\Collections\ArrayCollection();
+    }
+    
+    /**
+     * Add subscriber
+     *
+     * @param \NewsletterBundle\Entity\EmailSubscriber $subscriber
+     * @return SubscriberGroup
+     */
+    public function addSubscriber(\NewsletterBundle\Entity\EmailSubscriber $subscriber)
+    {
+        $this->subscriber[] = $subscriber;
+    
+        return $this;
+    }
+
+    /**
+     * Remove subscriber
+     *
+     * @param \NewsletterBundle\Entity\EmailSubscriber $subscriber
+     */
+    public function removeSubscriber(\NewsletterBundle\Entity\EmailSubscriber $subscriber)
+    {
+        $this->subscriber->removeElement($subscriber);
+    }
 }

@@ -21,6 +21,7 @@ class CreateEmailForm extends AbstractType{
         $builder->add('first_name','text');
         $builder->add('last_name','text');
         $builder->add('description', 'textarea');
+        $builder->add('active','hidden');
         $builder->add('save','submit');
     }
 
@@ -37,7 +38,7 @@ class CreateEmailForm extends AbstractType{
     public function setDefaultOptions(OptionsResolverInterface $resolver)
     {
         $resolver->setDefaults(array(
-           'data_class' => 'NewsletterBundle\Entity\EmailSubscriber'
+             'data_class' => 'NewsletterBundle\Entity\EmailSubscriber'
         ));
     }
 }

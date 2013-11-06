@@ -20,5 +20,21 @@
                 <th>{{ h.label }}</th>
             {% endif %}
         {% endfor %}
+        {% for rowKey,row in data %}
+            <tr>
+                {% for field in row.fields %}
+                    <td>{{ field }}</td>
+                {% endfor %}
+                <td>
+                    {%  for option in row.options %}
+                        <a
+                            href="{{ option.path }}"
+                            title="{{ option.label }}"
+                            >{{ option.label }}</a>
+                    {% endfor %}
+                </td>
+            </tr>
+        {% endfor %}
+
     </table>
 </div>

@@ -54,8 +54,17 @@ class EmailSubscriber
      * @var \Doctrine\Common\Collections\ArrayCollection
      * @ORM\ManyToMany(targetEntity="NewsletterBundle\Entity\SubscriberGroup", inversedBy="subscriber")
      * @ORM\JoinTable(name="subscriber_group_subscriber")
+     * 551102796433
+     * 57857815
      */
     private $groups;
+
+    /**
+     * simple identifier if an subscriber is activated (1) or or not
+     * @var int
+     * @ORM\Column(name="active", type="integer")
+     */
+    private $active = 0;
 
     public function __construct()
     {
@@ -186,5 +195,51 @@ class EmailSubscriber
     public function getGroups()
     {
         return $this->groups;
+    }
+
+    /**
+     * Set active
+     *
+     * @param integer $active
+     * @return EmailSubscriber
+     */
+    public function setActive($active)
+    {
+        $this->active = $active;
+    
+        return $this;
+    }
+
+    /**
+     * Get active
+     *
+     * @return integer 
+     */
+    public function getActive()
+    {
+        return $this->active;
+    }
+
+    /**
+     * Add groups
+     *
+     * @param \NewsletterBundle\Entity\SubscriberGroup $groups
+     * @return EmailSubscriber
+     */
+    public function addGroup(\NewsletterBundle\Entity\SubscriberGroup $groups)
+    {
+        $this->groups[] = $groups;
+    
+        return $this;
+    }
+
+    /**
+     * Remove groups
+     *
+     * @param \NewsletterBundle\Entity\SubscriberGroup $groups
+     */
+    public function removeGroup(\NewsletterBundle\Entity\SubscriberGroup $groups)
+    {
+        $this->groups->removeElement($groups);
     }
 }

@@ -6,7 +6,7 @@
 {% endblock %}
 {% block content %}
     <form action="{% if type == "edit" %}
-                    {{ path('_email_edit') }}
+                    {{ path('_email_edit',{"id":id}) }}
                   {% else %}
                     {{ path('_email_new') }}
                   {% endif %}"
@@ -17,6 +17,7 @@
         {{ form_row(form.first_name) }}
         {{ form_row(form.last_name) }}
         {{ form_row(form.description) }}
+        {{ form_row(form.active) }}
         {{ form_rest(form) }}
     </form>
 {%  endblock %}
