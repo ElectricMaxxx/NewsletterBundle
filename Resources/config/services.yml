@@ -1,7 +1,9 @@
 parameters:
   newsletter_mailer.class: NewsletterBundle\Services\NewsletterMailService
-
+  newsletter_mail_creator.class: NewsletterBundle\Services\NewsletterMailCreatorService
 services:
   newsletter_mailer:
     class: "%newsletter_mailer.class%"
     arguments: ["@mailer"]
+  newsletter_mail_creator:
+    class: "%newsletter_mail_creator.class%"

@@ -32,7 +32,7 @@ class NewsletterMailService {
         $this->mailer = $mailer;
     }
 
-    public function send(Email $mail, EmailSubscriber $subscriber)
+    public function send(Email $mail)
     {
 
     }

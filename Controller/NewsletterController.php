@@ -11,6 +11,7 @@ use NewsletterBundle\Entity\Email;
 use NewsletterBundle\Entity\EmailSubscriber;
 use NewsletterBundle\Exceptions\NewsletterException;
 use NewsletterBundle\Form\NewsletterType;
+use NewsletterBundle\Services\NewsletterMailCreatorService;
 use NewsletterBundle\Services\NewsletterMailService;
 use Sensio\Bundle\FrameworkExtraBundle\Configuration\Route;
 use Sensio\Bundle\FrameworkExtraBundle\Configuration\Template;
@@ -176,9 +177,15 @@ class NewsletterController extends AbstractCrudController{
     public function sendAction(Newsletter $newsletter){
         /** @var NewsletterMailService $mailService*/
         $mailService = $this->get('newsletter_mailer');
+        /** @var NewsletterMailCreatorService  $mailCreatorService */
+        $mailCreatorService = $this->get('newsletter_mail_creator');
+
+        //build the mail that we will send, the "to" property will be set later in a loop
+        $mail = $mailCreatorService->build($newsletter);
 
 
-        $mailService->send(new Email(),new EmailSubscriber());
+        $mailService->send($mail);
+        exit;
         return array();
     }
 
