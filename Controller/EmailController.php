@@ -15,39 +15,30 @@ use NewsletterBundle\Form\CreateEmailForm;
 use Symfony\Bundle\FrameworkBundle\Controller\Controller;
 use Sensio\Bundle\FrameworkExtraBundle\Configuration\Route;
 use Sensio\Bundle\FrameworkExtraBundle\Configuration\Template;
+use Sensio\Bundle\FrameworkExtraBundle\Configuration\ParamConverter;
 
 class EmailController extends  AbstractCrudController{
 
     /**
      * @Route("/edit/{id}",name="_email_edit")
      * @Template("NewsletterBundle:Email:edit.html.twig")
-     * @param $id
-     * @throws \NewsletterBundle\Exceptions\EmailSubscriberException
+     * @ParamConverter("subscriber",class="NewsletterBundle:EmailSubscriber")
+     *
+     * @param \NewsletterBundle\Entity\EmailSubscriber $subscriber
      * @return array
      */
-    public function editAction($id)
+    public function editAction(EmailSubscriber $subscriber)
     {
-        //get the right subscriber
-        $em = $this->getDoctrine()->getManager();
-        $repository = $em->getRepository("NewsletterBundle:EmailSubscriber");
-        $subscriber = $repository->findOneBy(array('id'=>$id));
-        if(!$subscriber)
-        {
-            throw new EmailSubscriberException(printf('Can not find the subscriber with id %id to delete it',$id));
-        }
-        $form = $this->get('form.factory')->create(new CreateEmailForm());
+        $form = $this->createForm(new CreateEmailForm(),$subscriber);
         $request = $this->getRequest();
-        //get the datat either from post or from the fresh object from database
-
-        $form->setData($subscriber);
         if($request->isMethod('POST'))
         {
             $form->submit($request);
             if($form->isValid())
             {
-                $editedSubscriber = $form->getData();
+                $subscriber = $form->getData();
                 $em = $this->getDoctrine()->getManager();
-                $em->persist($editedSubscriber);
+                $em->persist($subscriber);
                 $em->flush();
                 return $this->redirect($this->generateUrl('_email_list'));
             }
@@ -100,12 +91,12 @@ class EmailController extends  AbstractCrudController{
     /**
      * @Route("/new",name="_email_new" )
      * @Template("NewsletterBundle:Email:edit.html.twig")
+     *
      */
     public function newAction()
     {
-        $form = $this->get('form.factory')->create(new CreateEmailForm());
+        $form = $this->createForm(new CreateEmailForm(),new EmailSubscriber);
         $request = $this->getRequest();
-        $form->setData(new EmailSubscriber());
         if($request->isMethod('POST'))
         {
             $form->submit($request);
@@ -128,19 +119,16 @@ class EmailController extends  AbstractCrudController{
 
     /**
      * @Route("/delete/{id}",name="_email_delete" )
-     * @param $id
-     * @return \Symfony\Component\HttpFoundation\RedirectResponse
+     * @ParamConverter("subscriber",class="NewsletterBundle:EmailSubscriber")
+     *
+     *
+     * @param \NewsletterBundle\Entity\EmailSubscriber $subscriber
      * @throws \NewsletterBundle\Exceptions\EmailSubscriberException
+     * @return \Symfony\Component\HttpFoundation\RedirectResponse
      */
-    public function deleteAction($id)
+    public function deleteAction(EmailSubscriber $subscriber)
     {
         $em = $this->getDoctrine()->getManager();
-        $repository = $em->getRepository("NewsletterBundle:EmailSubscriber");
-        $subscriber = $repository->findOneBy(array('id'=>$id));
-        if(!$subscriber)
-        {
-            throw new EmailSubscriberException(printf('Can not find the subscriber with id %id to delete it',$id));
-        }
         $em->remove($subscriber);
         $em->flush();
         return $this->redirect($this->generateUrl('_email_list'));
@@ -149,21 +137,18 @@ class EmailController extends  AbstractCrudController{
     /**
      * method to toggle the activation state of an EmailSubscriber
      * @Route("/active/{id}",name="_email_activate")
-     * @param $id
-     * @return \Symfony\Component\HttpFoundation\RedirectResponse
+     * @ParamConverter("subscriber",class="NewsletterBundle:EmailSubscriber")
+     *
+     * @param \NewsletterBundle\Entity\EmailSubscriber $subscriber
      * @throws \NewsletterBundle\Exceptions\EmailSubscriberException
+     * @return \Symfony\Component\HttpFoundation\RedirectResponse
      */
-    public function activateAction($id)
+    public function activateAction(EmailSubscriber $subscriber)
     {
         $em = $this->getDoctrine()->getManager();
-        $SubscriberRepsitory = $em->getRepository('NewsletterBundle:EmailSubscriber');
-        $Subscriber = $SubscriberRepsitory->findOneBy(array('id'=>$id));
-        if(!$Subscriber){
-            throw new EmailSubscriberException(printf('Can not find the subscriber with id %id to toggle its activation state',$id));
-        }
-        $actualActive = $Subscriber->getActive();
+        $actualActive = $subscriber->getActive();
         $newActiveState = $actualActive == 0 ? 1 : 0;
-        $Subscriber->setActive($newActiveState);
+        $subscriber->setActive($newActiveState);
         $em->flush();
         return $this->redirect($this->generateUrl('_email_list'));
     }

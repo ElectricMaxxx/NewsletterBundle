@@ -87,12 +87,12 @@ class SubscriberGroupController extends AbstractCrudController{
      */
     public function editAction(SubscriberGroup $group)
     {
-        $form = $this->get('form.factory')->create(new CreateSubscriberGroupForm());
+        $form = $this->createForm(new CreateSubscriberGroupForm(),$group);
         $request = $this->getRequest();
 
-        $form->setData($group);
         if($request->isMethod('POST')){
             $form->submit($request);
+
             if($form->isValid())
             {
                 $editedGroup = $form->getData();

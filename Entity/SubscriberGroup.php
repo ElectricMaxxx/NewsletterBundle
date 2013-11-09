@@ -39,7 +39,7 @@ class SubscriberGroup
 
     /**
      * @var \Doctrine\Common\Collections\ArrayCollection
-     * @ORM\ManyToMany(targetEntity="NewsletterBundle\Entity\EmailSubscriber", mappedBy="groups")
+     * @ORM\ManyToMany(targetEntity="NewsletterBundle\Entity\EmailSubscriber",inversedBy="groups")
      * @ORM\JoinTable(name="subscriber_group_subscriber")
      */
     private $subscriber;
@@ -54,7 +54,7 @@ class SubscriberGroup
 
     /**
      * to have the endpoint to the mapped subscribers in the newsletter
-     * @ORM\ManyToMany(targetEntity="NewsletterBundle\Entity\Newsletter", inversedBy="subscriberGroups")
+     * @ORM\ManyToMany(targetEntity="NewsletterBundle\Entity\Newsletter", mappedBy="subscriberGroups")
      * @ORM\JoinTable(name="newsletter_groups")
      * @var ArrayCollection
      */
@@ -127,18 +127,6 @@ class SubscriberGroup
         return $this->description;
     }
 
-    /**
-     * Set subscriber
-     *
-     * @param ArrayCollection $subscribers
-     * @return SubscriberGroup
-     */
-    public function setSubscriber(ArrayCollection $subscribers)
-    {
-        $this->subscriber = $subscribers;
-
-        return $this;
-    }
 
     /**
      * Get subscriber

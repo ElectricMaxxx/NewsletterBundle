@@ -53,7 +53,7 @@ class Newsletter
      * to get a list of subscribers, if the user wants to send a newsletter to some
      * subscriber only or wants to add them to existing lists
      *
-     * @ORM\ManyToMany(targetEntity="NewsletterBundle\Entity\EmailSubscriber", mappedBy="newsletter")
+     * @ORM\ManyToMany(targetEntity="NewsletterBundle\Entity\EmailSubscriber", inversedBy="newsletter")
      * @ORM\JoinTable(name="newsletter_subscriber")
      *
      * @var ArrayCollection
@@ -64,7 +64,7 @@ class Newsletter
      * Made it as a collection. normally we would think one newsletter -> one group, but do not know what will
      * happen. By this we are able to merge several groups with some single subscribers.
      *
-     * @ORM\ManyToMany(targetEntity="NewsletterBundle\Entity\SubscriberGroup", mappedBy="newsletter")
+     * @ORM\ManyToMany(targetEntity="NewsletterBundle\Entity\SubscriberGroup", inversedBy="newsletter")
      * @ORM\JoinTable(name="newsletter_groups")
      *
      * @var ArrayCollection

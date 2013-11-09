@@ -113,23 +113,15 @@ class NewsletterController extends AbstractCrudController{
      *
      * @Route("/edit/{id}",name="_newsletter_edit")
      * @Template("NewsletterBundle:Newsletter:edit.html.twig")
-     * @param $id
-     * @return array|\Symfony\Component\HttpFoundation\RedirectResponse
+     * @ParamConverter("newsletter",class="NewsletterBundle:Newsletter")
+     *
+     * @param \NewsletterBundle\Entity\Newsletter $newsletter
      * @throws \NewsletterBundle\Exceptions\NewsletterException
+     * @return array|\Symfony\Component\HttpFoundation\RedirectResponse
      */
-    public function editAction($id){
-
-        $em = $this->getDoctrine()->getManager();
-        $repository = $em->getRepository('NewsletterBundle:Newsletter');
-
-        $newsletter = $repository->findOneBy(array('id'=> $id));
-        if(!$newsletter)
-        {
-            throw new NewsletterException(printf('Can not find any newsletter with id %id',$id));
-        }
-
+    public function editAction(Newsletter $newsletter)
+    {
         $form = $this->createForm(new NewsletterType(),$newsletter);
-
         $request = $this->getRequest();
         if($request->isMethod('POST'))
         {
@@ -137,6 +129,8 @@ class NewsletterController extends AbstractCrudController{
             if($form->isValid())
             {
                 $newsletter = $form->getData();
+                $em = $this->getDoctrine()->getManager();
+                $em->persist($newsletter);
                 $em->flush();
                 return $this->redirect($this->generateUrl('_newsletter_list'));
             }
@@ -171,6 +165,8 @@ class NewsletterController extends AbstractCrudController{
      * mail. This method will need the mailer service
      *
      * @Route("/send/{id}",name="_newsletter_send")
+     * @ParamConverter("newsletter",class="NewsletterBundle:Newsletter")
+     *
      * @param Newsletter $newsletter
      */
     public function sendAction(Newsletter $newsletter){}
