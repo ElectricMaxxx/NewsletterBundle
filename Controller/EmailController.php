@@ -9,13 +9,14 @@
 namespace NewsletterBundle\Controller;
 
 use NewsletterBundle\Entity\EmailSubscriber;
+use NewsletterBundle\Entity\SubscriberGroup;
 use NewsletterBundle\Exceptions\EmailSubscriberException;
 use NewsletterBundle\Form\CreateEmailForm;
 use Symfony\Bundle\FrameworkBundle\Controller\Controller;
 use Sensio\Bundle\FrameworkExtraBundle\Configuration\Route;
 use Sensio\Bundle\FrameworkExtraBundle\Configuration\Template;
 
-class EmailController extends  Controller{
+class EmailController extends  AbstractCrudController{
 
     /**
      * @Route("/edit/{id}",name="_email_edit")
@@ -37,6 +38,7 @@ class EmailController extends  Controller{
         $form = $this->get('form.factory')->create(new CreateEmailForm());
         $request = $this->getRequest();
         //get the datat either from post or from the fresh object from database
+
         $form->setData($subscriber);
         if($request->isMethod('POST'))
         {
@@ -68,22 +70,8 @@ class EmailController extends  Controller{
     public function indexAction()
     {
         $em = $this->getDoctrine()->getManager();
-        $SubscriberRepsitory = $em->getRepository('NewsletterBundle:EmailSubscriber');
-        $Subscriber = $SubscriberRepsitory->findAll();
-
-        $options = array(
-            'buttons' => array(
-                'create'=>array('label'=>'Neu erstellen','url_shortcut'=>'_new'),
-                'edit'=>array('label'=>'Update','url_shortcut'=>'_edit'),
-                'delete'=>array('label'=>'Löschen','url_shortcut'=>'_delete'),
-                'activate'=>array('label'=>array(
-                    '0'=>'Aktivieren',
-                    '1'=>'Deaktivieren'
-                    ),
-                    'url_shortcut'=>'_activate'
-                )
-            )
-        );
+        $SubscriberRepository = $em->getRepository('NewsletterBundle:EmailSubscriber');
+        $Subscriber = $SubscriberRepository->findAll();
 
         $head = array(
             'mail'  => array(
@@ -103,53 +91,12 @@ class EmailController extends  Controller{
         return array(
             'title'     => 'Email-Adressen verwalten',
             'message'   => 'verwalte deine Mailadressen hier',
-            'options'   => $options,
-            'data'      => $this->dataToRowConvert($options['buttons'],$head,$Subscriber),
+            'options'   => $this->defaultListOptions,
+            'data'      => $this->dataToRowConvert($this->defaultListOptions['buttons'],$head,$Subscriber,'_email'),
             'head'      => $head
         );
     }
 
-    private function dataToRowConvert($options,$head,$data)
-    {
-        $rows = array();
-        foreach($data as $set)
-        {
-            $row = array(
-                'fields'    => array(),
-                'options'   => array()
-            );
-            foreach($head as $headField)
-            {
-                if(method_exists($set,"get".ucfirst($headField['data_map'])))
-                {
-                    $row['fields'][] = $set->{"get".ucfirst($headField['data_map'])}();
-                }
-            }
-            foreach($options as $optionKey => $option)
-            {
-                if($optionKey != 'create')
-                {
-                    if($optionKey == 'activate' && property_exists($set,'active'))
-                    {
-                        $row['options'][] = array(
-                            'label' => $option['label'][$set->getActive()],
-                            'path'  => $this->generateUrl("_email".$option['url_shortcut'],array('id'=>$set->getId()))
-                        );
-                    }
-                    else
-                    {
-                        $row['options'][] = array(
-                            'label' => $option['label'],
-                            'path'  => $this->generateUrl("_email".$option['url_shortcut'],array('id'=>$set->getId()))
-                        );
-                    }
-                }
-            }
-            $rows[] = $row;
-            unset($row);
-        }
-        return $rows;
-    }
     /**
      * @Route("/new",name="_email_new" )
      * @Template("NewsletterBundle:Email:edit.html.twig")

@@ -10,7 +10,7 @@
             {%  if key == "options" and options.buttons.create  %}
                 <th>
                     {{ h.label }} |
-                    <a href="{{ path("_email_new") }}">
+                    <a href="{{ options.buttons.create.url }}">
                         <div class="button">
                             Create New
                         </div>

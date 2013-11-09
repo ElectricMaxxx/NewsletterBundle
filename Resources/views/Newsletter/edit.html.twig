@@ -6,19 +6,16 @@
 {% endblock %}
 {% block content %}
     <form action="{% if type == "edit" %}
-                    {{ path('_email_edit',{"id":id}) }}
+                    {{ path('_newsletter_edit',{"id":id}) }}
                   {% else %}
-                    {{ path('_email_new') }}
+                    {{ path('_newsletter_new') }}
                   {% endif %}"
           method="POST"
           id="{{ type }}_form">
         {{ form_errors(form) }}
-        {{ form_row(form.email) }}
-        {{ form_row(form.first_name) }}
-        {{ form_row(form.last_name) }}
-        {{ form_row(form.description) }}
-        {{ form_row(form.groups) }}
-        {{ form_row(form.active) }}
+        {{ form_row(form.title) }}
+        {{ form_row(form.headline) }}
+        {{ form_row(form.body) }}
         {{ form_rest(form) }}
     </form>
 {%  endblock %}

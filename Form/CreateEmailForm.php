@@ -9,12 +9,18 @@
 namespace NewsletterBundle\Form;
 
 
+use Doctrine\Common\Collections\ArrayCollection;
+use NewsletterBundle\Entity\SubscriberGroup;
 use Symfony\Component\Form\AbstractType;
 use Symfony\Component\Form\FormBuilderInterface;
 use Symfony\Component\OptionsResolver\OptionsResolverInterface;
 
 class CreateEmailForm extends AbstractType{
 
+    /**
+     * @param FormBuilderInterface $builder
+     * @param array $options
+     */
     public function buildForm(FormBuilderInterface $builder, array $options)
     {
         $builder->add('email', 'email');
@@ -22,6 +28,13 @@ class CreateEmailForm extends AbstractType{
         $builder->add('last_name','text');
         $builder->add('description', 'textarea');
         $builder->add('active','hidden');
+        $builder->add('groups','entity',array(
+            'class'   => "NewsletterBundle:SubscriberGroup",
+            'property'  => 'title',
+            'multiple'  => true,
+            'expanded'=> true
+
+        ));
         $builder->add('save','submit');
     }
 
@@ -35,6 +48,9 @@ class CreateEmailForm extends AbstractType{
         return 'create_email';
     }
 
+    /**
+     * @param OptionsResolverInterface $resolver
+     */
     public function setDefaultOptions(OptionsResolverInterface $resolver)
     {
         $resolver->setDefaults(array(

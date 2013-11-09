@@ -2,3 +2,11 @@ _email:
   resource: "@NewsletterBundle/Controller/EmailController.php"
   type: annotation
   prefix: /email
+_group:
+  resource: "@NewsletterBundle/Controller/SubscriberGroupController.php"
+  type: annotation
+  prefix: /group
+_newsletter:
+  resource: "@NewsletterBundle/Controller/NewsletterController.php"
+  type: annotation
+  prefix: /

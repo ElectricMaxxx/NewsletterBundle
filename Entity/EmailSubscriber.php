@@ -54,8 +54,6 @@ class EmailSubscriber
      * @var \Doctrine\Common\Collections\ArrayCollection
      * @ORM\ManyToMany(targetEntity="NewsletterBundle\Entity\SubscriberGroup", inversedBy="subscriber")
      * @ORM\JoinTable(name="subscriber_group_subscriber")
-     * 551102796433
-     * 57857815
      */
     private $groups;
 
@@ -66,9 +64,18 @@ class EmailSubscriber
      */
     private $active = 0;
 
+    /**
+     * to have the endpoint to the mapped subscribers in the newsletter
+     * @ORM\ManyToMany(targetEntity="NewsletterBundle\Entity\Newsletter", inversedBy="subscriber")
+     * @ORM\JoinTable(name="newsletter_subscriber")
+     * @var ArrayCollection
+     */
+    private $newsletter;
+
     public function __construct()
     {
         $this->groups = new ArrayCollection();
+        $this->newsletter = new ArrayCollection();
     }
 
 
@@ -242,4 +249,48 @@ class EmailSubscriber
     {
         $this->groups->removeElement($groups);
     }
+
+    /**
+     * Add newsletter
+     *
+     * @param \NewsletterBundle\Entity\Newsletter $newsletter
+     * @return EmailSubscriber
+     */
+    public function addNewsletter(\NewsletterBundle\Entity\Newsletter $newsletter)
+    {
+        $this->newsletter[] = $newsletter;
+    
+        return $this;
+    }
+
+    /**
+     * Remove newsletter
+     *
+     * @param \NewsletterBundle\Entity\Newsletter $newsletter
+     */
+    public function removeNewsletter(\NewsletterBundle\Entity\Newsletter $newsletter)
+    {
+        $this->newsletter->removeElement($newsletter);
+    }
+
+    /**
+     * Get newsletter
+     *
+     * @return \Doctrine\Common\Collections\Collection 
+     */
+    public function getNewsletter()
+    {
+        return $this->newsletter;
+    }
+
+    /**
+     * @param \Doctrine\Common\Collections\ArrayCollection $newsletter
+     */
+    public function setNewsletter(ArrayCollection $newsletter)
+    {
+        $this->newsletter = $newsletter;
+    }
+
+
+
 }
