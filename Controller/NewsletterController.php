@@ -7,8 +7,11 @@
  */
 
 namespace NewsletterBundle\Controller;
+use NewsletterBundle\Entity\Email;
+use NewsletterBundle\Entity\EmailSubscriber;
 use NewsletterBundle\Exceptions\NewsletterException;
 use NewsletterBundle\Form\NewsletterType;
+use NewsletterBundle\Services\NewsletterMailService;
 use Sensio\Bundle\FrameworkExtraBundle\Configuration\Route;
 use Sensio\Bundle\FrameworkExtraBundle\Configuration\Template;
 use Sensio\Bundle\FrameworkExtraBundle\Configuration\ParamConverter;
@@ -168,7 +171,15 @@ class NewsletterController extends AbstractCrudController{
      * @ParamConverter("newsletter",class="NewsletterBundle:Newsletter")
      *
      * @param Newsletter $newsletter
+     * @return array
      */
-    public function sendAction(Newsletter $newsletter){}
+    public function sendAction(Newsletter $newsletter){
+        /** @var NewsletterMailService $mailService*/
+        $mailService = $this->get('newsletter_mailer');
+
+
+        $mailService->send(new Email(),new EmailSubscriber());
+        return array();
+    }
 
 } 

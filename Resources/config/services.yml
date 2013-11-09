@@ -1,0 +1,7 @@
+parameters:
+  newsletter_mailer.class: NewsletterBundle\Services\NewsletterMailService
+
+services:
+  newsletter_mailer:
+    class: "%newsletter_mailer.class%"
+    arguments: ["@mailer"]
